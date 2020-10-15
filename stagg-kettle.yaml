@@ -1,6 +1,7 @@
 esphome:
   name: staggkettle
   platform: ESP32
+  arduino_version: latest
   board: featheresp32
   includes:
     - StaggESPHome.h
@@ -22,18 +23,9 @@ wifi:
   ssid: "Home Wifi"
   password: "robotsftw2406!"
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Staggkettle Fallback Hotspot"
-    password: "ROYmG3V50A9M"
-
-captive_portal:
-
 # Enable logging
 logger:
 
 mqtt:
   broker: 192.168.1.62
   discovery: true
-
-ota:

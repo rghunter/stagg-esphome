@@ -293,11 +293,22 @@ void StaggKettle::parseEvent(const uint8_t* data, size_t length, bool debug) {
 
 void StaggKettle::onNotify(BLERemoteCharacteristic* c, uint8_t* pData,
                            size_t length, bool isNotify) {
-  mtxState.lock();
-  if (state != StaggKettle::State::Connected) {
-    mtxState.unlock();
-    return;
-  }
+  
+  //unsigned long timeNow = millis();
+  //unsigned long timeLock = 0;
+  //while(!mtxState.try_lock()) {
+  //  timeNow = millis();
+  //  if (timeNow < timeLock)
+  //    timeLock = timeNow;
+  //  if (timeNow - timeLock > 1000) {
+  //    Serial.println("<StaggKettle::onNotify> Blocked by mutex");
+  //    timeLock = timeNow;
+  //  }
+  //}
+  //if (state != StaggKettle::State::Connected) {
+  //  mtxState.unlock();
+  //  return;
+  //}
 
   // Pattern recognizer that expects frames of the form:
   // 0xefdd followed by some bytes. ekgStateBytes holds the number of bytes for
@@ -342,7 +353,7 @@ void StaggKettle::onNotify(BLERemoteCharacteristic* c, uint8_t* pData,
       }
     }
   }
-  mtxState.unlock();
+  //mtxState.unlock();
 }
 
 void StaggKettle::sendCommand(StaggKettle::Command cmd) {
@@ -375,6 +386,7 @@ void StaggKettle::sendCommand(StaggKettle::Command cmd) {
   buf[6] = buf[3] + buf[5]; // Checksum
   buf[7] = buf[4]; // Checksum?
   prcKettleSerial->writeValue(buf, 8);
+  Serial.println("sent command");
   sequence++;
 }
 
@@ -391,7 +403,7 @@ void StaggKettle::setTemp(byte temp) {
 }
 
 void StaggKettle::loop() {
-  mtxState.lock();
+  //mtxState.lock();
   unsigned long timeNow = millis();
 
   // Handle 64bit wraparound
@@ -435,5 +447,5 @@ void StaggKettle::loop() {
     default:
       break;
   }
-  mtxState.unlock();
+  //mtxState.unlock();
 }

@@ -2,6 +2,7 @@
 #include "esphome.h"
 #include <BLEDevice.h>
 #include "StaggKettle.h"
+#include <FreeRTOS.h>
 
 static StaggKettle kettle;
 
@@ -11,6 +12,8 @@ static bool refresh_state;
 static bool xIdle;
 static byte xCurrentTemp = -1;
 static byte xTargetTemp = -1;
+
+unsigned long lastHeapDebug = -1;
 
 class Kettle : public Component, public Climate
 {
@@ -68,6 +71,14 @@ public:
 
         if(refresh_state) {
             this->publish_state();
+        }
+        unsigned long timeNow = millis();
+        // Handle 64 bit wraparound
+        if (timeNow < lastHeapDebug)
+          lastHeapDebug = timeNow;  
+        if (timeNow - lastHeapDebug > 500) {
+            ESP_LOGD("Stagg", "Free Heap: %d", ESP.getFreeHeap());
+            lastHeapDebug = timeNow;
         }
     }
     void control(const ClimateCall &call) override
