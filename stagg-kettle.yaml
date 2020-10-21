@@ -18,14 +18,11 @@ climate:
   climates:
     - name: "Stagg Kettle"
 
+ota:
 
-wifi:
-  ssid: "Home Wifi"
-  password: "robotsftw2406!"
+
 
 # Enable logging
 logger:
 
-mqtt:
-  broker: 192.168.1.62
-  discovery: true
+<<: !include secrets.yaml

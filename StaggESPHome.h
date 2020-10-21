@@ -76,7 +76,7 @@ public:
         // Handle 64 bit wraparound
         if (timeNow < lastHeapDebug)
           lastHeapDebug = timeNow;  
-        if (timeNow - lastHeapDebug > 500) {
+        if (timeNow - lastHeapDebug > 10000) {
             ESP_LOGD("Stagg", "Free Heap: %d", ESP.getFreeHeap());
             lastHeapDebug = timeNow;
         }

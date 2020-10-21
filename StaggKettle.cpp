@@ -397,7 +397,7 @@ void StaggKettle::setTemp(byte temp) {
     if (userTemp < 160) userTemp = 160;
   } else {
     if (userTemp > 100) userTemp = 100;
-    if (userTemp < 65) userTemp = 65;
+    if (userTemp < 40) userTemp = 40;
   }
   qCommands.push(StaggKettle::Command::Set);
 }
